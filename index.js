@@ -26,6 +26,11 @@ function tokenat(text,index,separator) {
     return splitarray[index];
 }
 
+function rand(min, max) {
+    let rand = min + Math.random() * (max + 1 - min);
+    return Math.floor(rand);
+}
+
 let clients = {};
 const ws = new WebSocket.Server({ server }); //
 console.log("Сервер Tasker версии "+version+" успешно запущен. Прослушиваем порт "+port+"...");
@@ -81,6 +86,15 @@ function card(message, _nickname) {
     }
     desks[desk].column[tokenat(mess,1,":/:")].row[tokenat(mess,2,":/:")].color = tokenat(mess,3,":/:")
     desks[desk].column[tokenat(mess,1,":/:")].row[tokenat(mess,2,":/:")].text = tokenat(mess,4,":/:")
+    save()
+}
+
+function column(message, _nickname) {
+    let mess = decoder.decode(message)
+    for (let _id in clients) {
+        clients[_id].send(mess);
+    }
+    desks[desk].column[tokenat(mess,1,":/:")].name = tokenat(mess,2,":/:")
     save()
 }
 
