@@ -256,7 +256,7 @@ ws.on('connection', (ws, req) => {
             } else {
                 if (whitelist) {
                     clients[id].send('kick/whitelist');
-                    console.log(`[ ! ] ${accounts[tmplog].nick}  ${clients[id].ip}   ${tmppass}`);
+                    console.log(`[ ! ] ${tmplog}  ${clients[id].ip}   ${tmppass}`);
                     clients[id].close();
                 } else {
                     clients[id].send('pass/fail');
