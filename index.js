@@ -1,5 +1,3 @@
-const { lookup } = require('dns');
-const { setPriority } = require('os');
 const WebSocket = require('ws');
 let accounts = require('./accounts.json');
 let settings = require('./settings.json');
@@ -17,11 +15,6 @@ function tokenat(text,index,separator) {
     text = text+""
     let splitarray = text.split(separator);
     return splitarray[index];
-};
-
-function rand(min, max) {
-    let rand = min + Math.random() * (max + 1 - min);
-    return Math.floor(rand);
 }
 
 let clients = {};
@@ -79,15 +72,6 @@ function card(message, _nickname) {
     }
     desks[desk].column[tokenat(mess,1,":/:")].row[tokenat(mess,2,":/:")].color = tokenat(mess,3,":/:")
     desks[desk].column[tokenat(mess,1,":/:")].row[tokenat(mess,2,":/:")].text = tokenat(mess,4,":/:")
-    save()
-}
-
-function column(message, _nickname) {
-    let mess = decoder.decode(message)
-    for (let _id in clients) {
-        clients[_id].send(mess);
-    }
-    desks[desk].column[tokenat(mess,1,":/:")].name = tokenat(mess,2,":/:")
     save()
 }
 
@@ -272,24 +256,46 @@ ws.on('connection', (ws, req) => {
             for (let _id in clients) {
                 clients[_id].send("join:/:"+clients[id].nick)
             }
-        };
+        }
         if (clients[id].logged) {
-            if (tokenat(message,0,":/:") == "mycursor") cursor(message, clients[id].nick);
-            if (tokenat(message,0,":/:") == "mytouch") touch(message, clients[id].nick);
-            if (tokenat(message,0,":/:") == "myclick") click(clients[id].nick, tokenat(message,1,":/:"));
-            if (tokenat(message,0,":/:") == "grayscaleme") grayscale(clients[id].nick, tokenat(message,1,":/:"));
-
             if (clients[id].admin) {
-                if (tokenat(message,0,":/:") == "card") card(message, clients[id].nick);
-                if (tokenat(message,0,":/:") == "column") column(message, clients[id].nick);
-                if (tokenat(message,0,":/:") == "carddelete") carddelete(message, clients[id].nick);
-                if (tokenat(message,0,":/:") == "columndelete") columndelete(message, clients[id].nick);
-                if (tokenat(message,0,":/:") == "cardadd") cardadd(message, clients[id].nick);
-                if (tokenat(message,0,":/:") == "columnadd") columnadd(message, clients[id].nick);
-                if (tokenat(message,0,":/:") == "cardmove") cardmove(message, clients[id].nick);
-                if (tokenat(message,0,":/:") == "columnmove") columnmove(message, clients[id].nick);
+                switch (tokenat(message,0,":/:")) {
+                    case "cursor":
+                        cursor(message, clients[id].nick);
+                        break;
+                    case "mytouch":
+                        touch(message, clients[id].nick);
+                        break;
+                    case "myclick":
+                        click(clients[id].nick, tokenat(message,1,":/:"));
+                        break;
+                    case "grayscaleme":
+                        grayscale(clients[id].nick, tokenat(message,1,":/:"));
+                        break;
+                    case "column":
+                        card(message, clients[id].nick);
+                        break;
+                    case "carddelete":
+                        carddelete(message, clients[id].nick);
+                        break;
+                    case "columndelete":
+                        columndelete(message, clients[id].nick);
+                        break;
+                    case "cardadd":
+                        cardadd(message, clients[id].nick);
+                        break;
+                    case "columnadd":
+                        columnadd(message, clients[id].nick);
+                        break;
+                    case "cardmove":
+                        cardmove(message, clients[id].nick);
+                        break;
+                    case "columnmove":
+                        columnmove(message, clients[id].nick);
+                        break;
+                }
             }
-        };
+        }
     });
 
     ws.on('close', function() {

@@ -1,3 +1,3 @@
 @ECHO OFF
-node server0
+yarn run start
 pause

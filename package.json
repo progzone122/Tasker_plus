@@ -1,0 +1,14 @@
+{
+  "name": "tasker_plus",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/progzone122/Tasker_plus.git",
+  "author": "Diablo & Murka124",
+  "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "ws": "^8.8.0"
+  }
+}
