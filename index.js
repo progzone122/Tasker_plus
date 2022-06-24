@@ -283,7 +283,7 @@ ws.on('connection', (ws, req) => {
         if (clients[id].logged) {
             if (clients[id].admin) {
                 switch (tokenat(message,0,":/:")) {
-                    case "cursor":
+                    case "mycursor":
                         cursor(message, clients[id].nick);
                         break;
                     case "mytouch":
