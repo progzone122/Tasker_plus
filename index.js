@@ -1,3 +1,11 @@
+//Запускаем HTTP сервер
+const PORT = process.env.PORT || 3000;
+const INDEX = '/index.html';
+
+const server = express()
+  .use((req, res) => res.sendFile(INDEX, { root: __dirname }))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+//Запускаем WebSocket сервер
 const WebSocket = require('ws');
 let accounts = require('./accounts.json');
 let settings = require('./settings.json');
@@ -18,7 +26,7 @@ function tokenat(text,index,separator) {
 }
 
 let clients = {};
-const ws = new WebSocket.Server({port: port});
+const ws = new WebSocket.Server({ server }); //
 console.log("Сервер Tasker версии "+version+" успешно запущен. Прослушиваем порт "+port+"...");
 
 function ready(_websock) {
