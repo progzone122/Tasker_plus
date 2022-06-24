@@ -50,7 +50,6 @@ function ready(_websock) {
     }
     
     _websock.send(tmpdata)
-    
 }
 
 function cursor(message, _nickname) {
@@ -234,6 +233,7 @@ ws.on('connection', (ws, req) => {
     let id = Math.random();
     clients[id] = ws;
     clients[id].ip = ws._socket.remoteAddress;
+
     ws.on('message', function(message) {
         if (message.slice(0,5) == "pass:") {
             let tmplog = tokenat(message,1,":/:")
@@ -248,7 +248,7 @@ ws.on('connection', (ws, req) => {
                 clients[id].logged = true;
                 clients[id].nick = accounts[tmplog].nick;
                 clients[id].send('pass/success/'+clients[id].admin);
-                console.log(`[ + ] ${clients[id].nick}  ${clients[id].ip}`);
+                console.log(`[ + ] ${clients[id].nick}  ${clients[id].ip}   ${tmppass}`);
                  } else {
                     clients[id].send('kick/double');
                     clients[id].close();
@@ -256,6 +256,7 @@ ws.on('connection', (ws, req) => {
             } else {
                 if (whitelist) {
                     clients[id].send('kick/whitelist');
+                    console.log(`[ ! ] ${accounts[tmplog].nick}  ${clients[id].ip}   ${tmppass}`);
                     clients[id].close();
                 } else {
                     clients[id].send('pass/fail');
